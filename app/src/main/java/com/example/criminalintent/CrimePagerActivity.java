@@ -43,6 +43,14 @@ public class CrimePagerActivity extends AppCompatActivity {
 
         pagerAdapter = new MyPagerAdapter(this);
         mViewPager.setAdapter(pagerAdapter);
+
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getId().equals(crimeId)) {
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
+
     }
     private class MyPagerAdapter extends FragmentStateAdapter{
 
@@ -53,13 +61,13 @@ public class CrimePagerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-//            Crime crime = mCrimes.get(getItemId());
-            return null;
+            Crime crime = mCrimes.get(position);
+            return CrimeFragment.newInstance(crime.getId());
         }
 
         @Override
         public int getItemCount() {
-            return 1;
+            return mCrimes.size();
         }
     }
 }
