@@ -7,9 +7,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,8 +21,9 @@ import java.util.UUID;
 public class CrimePagerActivity extends AppCompatActivity {
     private static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private List<Crime> mCrimes;
+    private FragmentStateAdapter pagerAdapter;
 
     public static Intent newIntent(Context packageContext, UUID crimeId){
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
@@ -31,24 +36,30 @@ public class CrimePagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime_pager);
 
-        mViewPager = (ViewPager) findViewById(R.id.crime_view_pager);
+        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+
+        mViewPager = (ViewPager2) findViewById(R.id.crime_view_pager);
         mCrimes = CrimeLab.get(this).getCrimes();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentStatePagerAdapter() {
+        pagerAdapter = new MyPagerAdapter(this);
+        mViewPager.setAdapter(pagerAdapter);
+    }
+    private class MyPagerAdapter extends FragmentStateAdapter{
 
-            @Override
-            public Fragment getItem(int position) {
-                Crime crime = mCrimes.get(getItemPosition());
+        public MyPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+            super(fragmentActivity);
+        }
 
-                return CrimeFragment.newInstance(crime.getId());
-            }
-            @Override
-            public int getCount() {
-                return mCrimes.size();
-            }
-        });
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+//            Crime crime = mCrimes.get(getItemId());
+            return null;
+        }
 
-        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
     }
 }
