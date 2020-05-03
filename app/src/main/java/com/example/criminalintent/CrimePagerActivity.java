@@ -50,7 +50,6 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
-
     }
     private class MyPagerAdapter extends FragmentStateAdapter{
 
